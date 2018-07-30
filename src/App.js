@@ -5,12 +5,13 @@ import { muscles, exercises } from './store';
 
 class App extends Component {
   state = {
-    exercises
+    exercises,
+    exercise: {}
   };
 
   getExercisesByMuscles() {
     /**
-     *  Object.entries() : [key, value] 형태의 배열을 리턴한다.
+     *  Object.entries() : 객체를 [key, value] 형태의 배열로 리턴한다.
      */
     return Object.entries(
       this.state.exercises.reduce((exercises, exercise) => {
@@ -28,13 +29,41 @@ class App extends Component {
     );
   }
 
+  /**
+   * 카테고리 선택
+   */
+  handleCategorySelected = category => {
+    this.setState({
+      category
+    });
+  };
+
+  /**
+   * 운동 선택
+   */
+  handleExerciseSelected = id => {
+    this.setState(({ exercises }) => ({
+      exercise: exercises.find(ex => ex.id === id)
+    }));
+  };
+
   render() {
-    const exercise = this.getExercisesByMuscles();
+    const exercises = this.getExercisesByMuscles();
+    const { category, exercise } = this.state;
     return (
       <Fragment>
         <Header />
-        <Exercises exercise={exercise} />
-        <Footer muscles={muscles} />
+        <Exercises
+          exercises={exercises}
+          category={category}
+          onSelect={this.handleExerciseSelected}
+          exercise={exercise}
+        />
+        <Footer
+          category={category}
+          muscles={muscles}
+          onSelect={this.handleCategorySelected}
+        />
       </Fragment>
     );
   }

@@ -18,34 +18,47 @@ const styles = {
   }
 };
 
-export default ({ exercise }) => (
+export default ({
+  exercises,
+  category,
+  onSelect,
+  exercise: {
+    id,
+    title = 'Welcome!',
+    description = 'Please select an exercise from the list on the left'
+  }
+}) => (
   <Grid container spacing={8}>
     <Grid item sm>
       <Paper style={styles.Paper}>
-        {exercise.map(([group, exercise]) => (
-          <Fragment>
-            <Typography
-              variant="headline"
-              style={{ textTransform: 'capitalize' }}
-            >
-              {group}
-            </Typography>
-            <List component="ul">
-              {exercise.map(({ title }) => (
-                <ListItem button>
-                  <ListItemText primary={title} />
-                </ListItem>
-              ))}
-            </List>
-          </Fragment>
-        ))}
+        {exercises.map(
+          ([group, exercise]) =>
+            // category가 없으면(All일 때) 전체 출력
+            !category || category === group ? (
+              <Fragment key={group}>
+                <Typography
+                  variant="headline"
+                  style={{ textTransform: 'capitalize' }}
+                >
+                  {group}
+                </Typography>
+                <List component="ul">
+                  {exercise.map(({ id, title }) => (
+                    <ListItem key={id} button onClick={() => onSelect(id)}>
+                      <ListItemText primary={title} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Fragment>
+            ) : null
+        )}
       </Paper>
     </Grid>
     <Grid item sm>
       <Paper style={styles.Paper}>
-        <Typography variant="display1">Welcome!</Typography>
+        <Typography variant="display1">{title}</Typography>
         <Typography variant="subheading" style={{ marginTop: 20 }}>
-          Please select an exercise from the list on the left
+          {description}
         </Typography>
       </Paper>
     </Grid>
