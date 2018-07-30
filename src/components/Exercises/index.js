@@ -5,8 +5,11 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton
 } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 
 const styles = {
   Paper: {
@@ -22,6 +25,7 @@ export default ({
   exercises,
   category,
   onSelect,
+  onDelete,
   exercise: {
     id,
     title = 'Welcome!',
@@ -29,6 +33,7 @@ export default ({
   }
 }) => (
   <Grid container spacing={8}>
+    {/* Left Pane */}
     <Grid item sm>
       <Paper style={styles.Paper}>
         {exercises.map(
@@ -46,6 +51,11 @@ export default ({
                   {exercise.map(({ id, title }) => (
                     <ListItem key={id} button onClick={() => onSelect(id)}>
                       <ListItemText primary={title} />
+                      <ListItemSecondaryAction>
+                        <IconButton onClick={() => onDelete(id)}>
+                          <Delete />
+                        </IconButton>
+                      </ListItemSecondaryAction>
                     </ListItem>
                   ))}
                 </List>
@@ -54,6 +64,8 @@ export default ({
         )}
       </Paper>
     </Grid>
+
+    {/* Right Pane */}
     <Grid item sm>
       <Paper style={styles.Paper}>
         <Typography variant="display1">{title}</Typography>
